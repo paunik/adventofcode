@@ -2,19 +2,20 @@ package eighteen
 
 import (
 	"bufio"
-	"fmt"
 	"log"
 	"os"
 	"strconv"
 )
 
 const (
-	input   = "https://adventofcode.com/2018/day/1/input"
 	tmpFile = "/tmp/input.txt"
 )
 
 // LoadFile is loading
-func LoadFile() {
+func LoadFile() []int {
+
+	res := make([]int, 0)
+
 	file, err := os.Open(tmpFile)
 	if err != nil {
 		log.Fatal(err)
@@ -24,47 +25,78 @@ func LoadFile() {
 	scanner := bufio.NewScanner(file)
 
 	for scanner.Scan() {
-		DoIt(scanner.Text())
+		no := scanner.Text()
+
+		integerNo, err := strconv.Atoi(no)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+		res = append(res, integerNo)
 	}
 
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
+
+	return res
 }
 
-//
-// DoIt actually does the work for first exercise
-func DoIt(textInteger string) int {
-	// util.DownloadFile(tmpFile, input)
+// ChronalCalibration does calculation
+func ChronalCalibration(input []int) int {
+	sum := 0
+	for _, i := range input {
+		sum += i
+	}
 
+	return sum
+}
+
+// ChronalCalibrationDouble does calculation
+func ChronalCalibrationDouble(input []int) int {
 	mFreq := make(map[int]int)
 
 	res := 0
-	mFreq[res] = 1
 	mFreq[0] = 1
 
+	shouldExit := false
 	cnt := 0
+	for {
+		for _, i := range input {
+			res += i
+			if _, found := mFreq[res]; found {
+				shouldExit = true
+				break
+			}
 
-	inputIntiger, err := strconv.Atoi(textInteger)
-	if err != nil {
-		panic(err)
+			mFreq[res] = 1
+		}
+
+		if shouldExit == true {
+			break
+		}
+
+		cnt++
 	}
 
-	res += inputIntiger
+	return res
+}
 
-	if x, found := mFreq[res]; found {
-		fmt.Println("x: ", x)
-		fmt.Println("res: ", res)
-		found = true
-	} else {
-		mFreq[res] = 1
+// DoIt actually does the work for first exercise
+func DoIt() int {
+	res := 0
+	input := LoadFile()
+	for _, inp := range input {
+		res += inp
 	}
+	return res
+}
 
-	if cnt == 1 {
-		fmt.Println("res:", res)
-		fmt.Println("int:", inputIntiger)
-	}
+// DoItSecond actually does the work for first exercise
+func DoItSecond() int {
+	res := 0
+	input := LoadFile()
+	res = ChronalCalibrationDouble(input)
 
-	fmt.Println(res)
 	return res
 }
