@@ -14,12 +14,12 @@ func ConvertWiresToLines(wireOne, wireTwo string) int {
 
 	sX := 0
 	sY := 0
-	o := ""
+	var o string
 
 	m1 := make(map[string]string)
 
 	for _, w := range w1 {
-		input := strings.Split(w, "")
+		input := strings.SplitN(w, "", 2)
 		step, _ := strconv.Atoi(input[1])
 
 		k := fmt.Sprintf("x:%d,y:%d", sX, sY)
@@ -53,12 +53,11 @@ func ConvertWiresToLines(wireOne, wireTwo string) int {
 
 	sX = 0
 	sY = 0
-	o = ""
 
 	m2 := make(map[string]string)
 
 	for _, w := range w2 {
-		input := strings.Split(w, "")
+		input := strings.SplitN(w, "", 2)
 		step, _ := strconv.Atoi(input[1])
 
 		if input[0] == "L" || input[0] == "R" {
@@ -99,12 +98,12 @@ func ConvertWiresToLines(wireOne, wireTwo string) int {
 		v1, c1 := m1[k]
 		v2, c2 := m2[k]
 
-		if c2 != false && c1 != false && ((v1 == "H" && v2 == "V") || (v1 == "V" && v2 == "H"))  {
+		if c2 != false && c1 != false && ((v1 == "H" && v2 == "V") || (v1 == "V" && v2 == "H")) {
 
-			fmt.Println(" ")
-			fmt.Print("k: ", k)
-			fmt.Print(", v1: ", v1)
-			fmt.Print(", v2: ", v2)
+			// fmt.Println(" ")
+			// fmt.Print("k: ", k)
+			// fmt.Print(", v1: ", v1)
+			// fmt.Print(", v2: ", v2)
 			x = append(x, k)
 		}
 	}
@@ -120,7 +119,7 @@ func ConvertWiresToLines(wireOne, wireTwo string) int {
 		xInt, _ := strconv.Atoi(xxx[1])
 		yInt, _ := strconv.Atoi(yyy[1])
 
-		min = append(min, xInt+yInt)
+		min = append(min, Abs(xInt)+Abs(yInt))
 	}
 
 	mm := min[0]
@@ -131,4 +130,11 @@ func ConvertWiresToLines(wireOne, wireTwo string) int {
 	}
 
 	return mm
+}
+
+func Abs(x int) int {
+	if x < 0 {
+		return -x
+	}
+	return x
 }
