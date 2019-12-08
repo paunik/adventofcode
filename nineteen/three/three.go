@@ -18,6 +18,8 @@ func ConvertWiresToLines(wireOne, wireTwo string) int {
 
 	m1 := make(map[string]string)
 
+	totalWireLength := 0
+
 	for _, w := range w1 {
 		input := strings.SplitN(w, "", 2)
 		step, _ := strconv.Atoi(input[1])
@@ -45,9 +47,11 @@ func ConvertWiresToLines(wireOne, wireTwo string) int {
 				sY = sY - 1
 			}
 
+			totalWireLength++
+
 			k := fmt.Sprintf("x:%d,y:%d", sX, sY)
 
-			m1[k] = o
+			m1[k] = fmt.Sprintf("%s:%d", o, totalWireLength)
 		}
 	}
 
@@ -55,6 +59,8 @@ func ConvertWiresToLines(wireOne, wireTwo string) int {
 	sY = 0
 
 	m2 := make(map[string]string)
+
+	totalWireLength = 0
 
 	for _, w := range w2 {
 		input := strings.SplitN(w, "", 2)
@@ -85,9 +91,11 @@ func ConvertWiresToLines(wireOne, wireTwo string) int {
 				o = "V"
 			}
 
+			totalWireLength++
+
 			k := fmt.Sprintf("x:%d,y:%d", sX, sY)
 
-			m2[k] = o
+			m2[k] = fmt.Sprintf("%s:%d", o, totalWireLength)
 		}
 	}
 
@@ -98,15 +106,25 @@ func ConvertWiresToLines(wireOne, wireTwo string) int {
 		v1, c1 := m1[k]
 		v2, c2 := m2[k]
 
+		rV1 := strings.SplitN(v1, ":", 2)
+		rV2 := strings.SplitN(v2, ":", 2)
+
+		v1 = rV1[0]
+		v2 = rV2[0]
+
 		if c2 != false && c1 != false && ((v1 == "H" && v2 == "V") || (v1 == "V" && v2 == "H")) {
 
 			// fmt.Println(" ")
 			// fmt.Print("k: ", k)
 			// fmt.Print(", v1: ", v1)
 			// fmt.Print(", v2: ", v2)
-			x = append(x, k)
+			// fmt.Print(", tw1: ", rV1[1])
+			// fmt.Print(", tw2: ", rV2[1])
+			// x = append(x, k) first
+			x = append(x, fmt.Sprintf("x:%s,y:%s", rV1[1], rV2[1]))
 		}
 	}
+	fmt.Println(" ")
 
 	min := make([]int, 0)
 
